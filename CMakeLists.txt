@@ -18,7 +18,7 @@ target_link_libraries(sql_csv ${Boost_LIBRARIES})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=c++14 -Wall -pedantic-errors)
-    add_definitions(-Wfatal-errors)
+    #add_definitions(-Wfatal-errors)
     add_definitions(-DBOOST_SPIRIT_USE_PHOENIX_V3)
     add_definitions(${GCC_COVERAGE_LINK_FLAGS}$)
 endif()

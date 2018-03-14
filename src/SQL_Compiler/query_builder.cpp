@@ -1,73 +1,10 @@
-#include <exception>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <fstream>
-#include <sstream>
-#include <iterator>
-
-#include <boost/spirit/home/x3.hpp>
-#include <boost/spirit/include/support_istream_iterator.hpp>
-
 #include "query_builder.hpp"
+#include "context.hpp"
 
 using namespace std;
 
 namespace SQL_Compiler {
     namespace {
-        class Relation {
-            string name;
-            unordered_map<string, int> attributes;
-        public:
-            Relation() = delete;
-            Relation(string const& filename) : name(filename) {
-                ifstream file(filename);
-                if (!file)
-                    throw Semantic_Error("fail to open "+filename);
-                boost::spirit::istream_iterator iter(file >> noskipws), eof;
-                vector<string> names;
-                auto const parser = (+(boost::spirit::x3::ascii::alnum)) % (*("," | boost::spirit::x3::ascii::blank));
-                boost::spirit::x3::parse(iter, eof, parser, names);
-                for (int att = 0; att < (int)names.size(); ++att) {
-                    attributes[names[att]] = att;
-                }
-            }
-            Relation(Relation const&) = default;
-            Relation& operator=(Relation const&) = default;
-            int operator[](string const& attribute) const {
-                if (attributes.count(attribute) > 0)
-                    return attributes.at(attribute);
-                throw Semantic_Error(attribute + " is not an attribute of " + name);
-            }
-        };
-
-        class Context {
-            unordered_map<string, Relation> relations;
-        public:
-            Context() = default;
-            Context(Context const&) = default;
-            Context& operator=(Context const&) = default;
-
-            void add_relation(string const& name, Relation const& r) {
-                if (relations.count(name) > 0)
-                    throw Semantic_Error(name + " is already the name of an existing relation");
-                relations.insert({name, r});
-            }
-
-            Relation const& operator[](string const& name) const {
-                if (relations.count(name) == 0)
-                    throw Semantic_Error(name + " is not the name of a relation");
-                return relations.at(name);
-            }
-
-            void extend_from(SQL_AST::carthesian_product const& relations) {
-                for (auto const& sql_relation : relations.relations_) {
-                    Relation relation(sql_relation.filename_);
-                    add_relation(sql_relation.alias_, relation);
-                }
-            }
-        };
-
         class QueryBuilder {
         public:
             QueryBuilder() = default;

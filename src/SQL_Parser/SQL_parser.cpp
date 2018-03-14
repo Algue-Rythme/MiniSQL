@@ -23,9 +23,8 @@ namespace SQL_Parser {
         bool success = x3::phrase_parse(iter, end, parser, space, ast);
 
         if (!success)
-            throw Parsing_Error("syntax errors");
-        if (iter != end) {
-            throw Parsing_Error("expecting end of input here: \"" + string(iter, end) + "\"");
-        }
+            throw ParsingError("syntax errors");
+        if (iter != end)
+            throw ParsingError("expecting end of input here: \"" + string(iter, end) + "\"");
     }
 }
