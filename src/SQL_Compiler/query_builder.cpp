@@ -1,63 +1,69 @@
 #include "query_builder.hpp"
 #include "context.hpp"
+#include "operators.hpp"
+
+#include <functional>
 
 using namespace std;
 
 namespace SQL_Compiler {
     namespace {
-        class QueryBuilder {
+        class QueryBuilder : boost::static_visitor<BaseOperator*> {
         public:
             QueryBuilder() = default;
 
-            void visit(SQL_AST::query const& ast) {
-                Context ctx;
-                visit(ctx, ast.select_);
+            BaseOperator* operator()(Context const& ctx, SQL_AST::relation const& relation) {
+                return new CSV_Reader(relation.filename_);
             }
 
-            void visit(Context const& old_ctx, SQL_AST::select const& select) {
+            vector<BaseOperator*> build_operators(Context const& ctx, SQL_AST::cartesian_product const& prod) {
+                vector<BaseOperator*> operators;
+                operators.reserve(prod.relations_.size());
+                for (auto const& rel : prod.relations_) {
+                    operators.emplace_back((*this)(ctx, rel));
+                }
+                return operators;
+            }
+
+            BaseOperator* operator()(Context const& ctx, SQL_AST::union_op const& union_op) {
+                auto visitor = std::bind(*this, ctx, std::placeholders::_1);
+                auto left = boost::apply_visitor(visitor, union_op.left_);
+                auto right = boost::apply_visitor(visitor, union_op.right_);
+                return new UnionOperator(left, right);
+            }
+
+            BaseOperator* operator()(Context const& old_ctx, SQL_AST::select const& select) {
+                auto forward_ops = build_operators(old_ctx, select.relations_);
+                BaseOperator* product = new CartesianProduct(forward_ops);
                 Context ctx = old_ctx;
                 ctx.extend_from(select.relations_);
-                visit(ctx, select.or_conditions_);
-                visit(ctx, select.projections_);
+                BaseOperator* filter = new Filter(product, ctx, select.or_conditions_);
+                (*this)(ctx, select.projections_);
+                BaseOperator* project = new Project(filter, ctx, select.projections_);
+                return project;
             }
 
-            template<typename T>
-            void visit(Context const& ctx, vector<T> const& t) {
-                for (auto const& e : t) {
-                    visit(ctx, e);
+            void operator()(Context const& ctx, SQL_AST::projections const& projections) {
+                for (auto const& proj : projections.project_rename_) {
+                    (*this)(ctx, proj);
                 }
             }
 
-            void visit(Context const& ctx, SQL_AST::projections const& projections) {
-                visit(ctx, projections.project_rename_);
+            void operator()(Context const& ctx, SQL_AST::project_rename const& project_rename) {
+                (*this)(ctx, project_rename.attribute_);
             }
 
-            void visit(Context const& ctx, SQL_AST::project_rename const& project_rename) {
-                visit(ctx, project_rename.attribute_);
-            }
-
-            void visit(Context const& ctx, SQL_AST::or_conditions const& or_conditions) {
-                visit(ctx, or_conditions.and_conditions_);
-            }
-
-            void visit(Context const& ctx, SQL_AST::and_conditions const& and_conditions) {
-                visit(ctx, and_conditions.atomic_conditions_);
-            }
-
-            void visit(Context const& ctx, SQL_AST::atomic_condition const& atomic_condition) {
-                visit(ctx, atomic_condition.left_);
-                visit(ctx, atomic_condition.right_);
-            }
-
-            void visit(Context const& ctx, SQL_AST::attribute const& attribute) {
+            void operator()(Context const& ctx, SQL_AST::attribute const& attribute) {
                 auto const& relation = ctx[attribute.relation_];
                 relation[attribute.column_];
             }
         };
     }
 
-    void build(SQL_AST::query const& ast) {
+    unique_ptr<BaseOperator> build(SQL_AST::query const& ast) {
+        Context ctx;
         QueryBuilder builder;
-        builder.visit(ast);
+        auto visitor = std::bind(builder, ctx, std::placeholders::_1);
+        return unique_ptr<BaseOperator>(boost::apply_visitor(visitor, ast));
     }
 }

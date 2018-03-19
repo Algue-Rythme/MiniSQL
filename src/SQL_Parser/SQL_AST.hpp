@@ -15,6 +15,17 @@ namespace SQL_AST {
 
     struct nil {};
 
+    struct select;
+    struct union_op;
+
+    struct query : x3::variant
+        < x3::forward_ast<select>
+        , x3::forward_ast<union_op>
+    > {
+        using base_type::base_type;
+        using base_type::operator=;
+    };
+
     struct attribute {
         std::string relation_;
         std::string column_;
@@ -34,8 +45,16 @@ namespace SQL_AST {
         std::string alias_;
     };
 
-    struct carthesian_product {
+    struct cartesian_product {
         std::vector<relation> relations_;
+    };
+
+    struct operand : x3::variant
+        < attribute
+        , std::string
+    > {
+        using base_type::base_type;
+        using base_type::operator=;
     };
 
     enum class comparison_operator {
@@ -48,9 +67,9 @@ namespace SQL_AST {
     };
 
     struct atomic_condition {
-        SQL_AST::attribute left_;
+        operand left_;
         comparison_operator op_;
-        SQL_AST::attribute right_;
+        operand right_;
     };
 
     struct and_conditions {
@@ -63,12 +82,13 @@ namespace SQL_AST {
 
     struct select {
         projections projections_;
-        carthesian_product relations_;
+        cartesian_product relations_;
         or_conditions or_conditions_;
     };
 
-    struct query {
-        select select_;
+    struct union_op {
+        query left_;
+        query right_;
     };
 
     inline std::ostream& operator<<(std::ostream& out, nil) {

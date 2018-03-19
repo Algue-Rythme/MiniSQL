@@ -7,9 +7,9 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
     SQL_AST::atomic_condition,
-    (SQL_AST::attribute, left_)
+    (SQL_AST::operand, left_)
     (SQL_AST::comparison_operator, op_)
-    (SQL_AST::attribute, right_)
+    (SQL_AST::operand, right_)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -29,7 +29,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::carthesian_product,
+    SQL_AST::cartesian_product,
     (std::vector<SQL_AST::relation>, relations_)
 )
 
@@ -53,13 +53,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
     SQL_AST::select,
     (SQL_AST::projections, projections_)
-    (SQL_AST::carthesian_product, relations_)
+    (SQL_AST::cartesian_product, relations_)
     (SQL_AST::or_conditions, or_conditions_)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::query,
-    (SQL_AST::select, select_)
+    SQL_AST::union_op,
+    (SQL_AST::query, left_)
+    (SQL_AST::query, right_)
 )
 
 #endif

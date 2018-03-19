@@ -1,5 +1,6 @@
 #include <functional>
 #include <vector>
+#include <iostream>
 
 #include "../SQL_Parser/SQL_AST.hpp"
 #include "filter_operator.hpp"
@@ -7,61 +8,88 @@
 using namespace std;
 
 namespace SQL_Compiler {
-    FilterIterator::FilterIterator(OperatorIterator&& it, TupleFilter const& f): it(std::move(it)), filter(f) {}
+    FilterIterator::FilterIterator(OperatorIterator&& it_, TupleFilter const& f): it(std::move(it_)), filter(f) {
+        skip();
+    }
+
+    void FilterIterator::skip() {
+        while (!it.is_done() && !filter(*it)) {
+            ++it;
+        }
+    }
 
     Tuple const& FilterIterator::dereference() const {
         return *it;
     }
 
     void FilterIterator::increment() {
-        do {
-            ++it;
-        } while (!it.is_done() && !filter(*it));
+        ++it;
+        skip();
     }
 
     bool FilterIterator::is_done() const {
         return it.is_done();
     }
 
-    void FilterIterator::reset() {
-        it.reset();
+    void FilterIterator::restart() {
+        it.restart();
+    }
+
+    namespace {
+        typedef function<string const& (Tuple const&)> Accessor;
+        struct GetOperand : public boost::static_visitor<Accessor> {
+            Context const& ctx;
+            GetOperand(Context const& ctx_):ctx(ctx_){}
+
+            Accessor operator()(SQL_AST::attribute const& att) const {
+                int ind = ctx[att.relation_][att.column_];
+                return [=](Tuple const& t) -> string const& {
+                    return t[ind];
+                };
+            }
+
+            Accessor operator()(string const& str) const {
+                return [=](Tuple const&) -> string const& {
+                    return str;
+                };
+            }
+        };
     }
 
     TupleFilter Filter::compile(SQL_AST::atomic_condition const& atomic_cond) {
-        auto const& left = atomic_cond.left_;
-        auto const& right = atomic_cond.right_;
-        int ind1 = ctx[left.relation_][left.column_];
-        int ind2 = ctx[right.relation_][right.column_];
+        auto get_left = boost::apply_visitor(GetOperand(ctx), atomic_cond.left_);
+        auto get_right = boost::apply_visitor(GetOperand(ctx), atomic_cond.right_);
+
         TupleFilter filter;
         switch (atomic_cond.op_) {
             case SQL_AST::comparison_operator::EQ:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] == t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) == get_right(t);
                 };
             break ;
             case SQL_AST::comparison_operator::NEQ:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] != t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) != get_right(t);
                 };
             break ;
             case SQL_AST::comparison_operator::GT:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] > t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) > get_right(t);
                 };
             break ;
             case SQL_AST::comparison_operator::GTE:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] >= t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) >= get_right(t);
                 };
             break ;
             case SQL_AST::comparison_operator::LT:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] < t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) < get_right(t);
                 };
             break ;
             case SQL_AST::comparison_operator::LTE:
-                filter = [ind1,ind2](Tuple const& t) -> bool {
-                    return t[ind1] <= t[ind2];
+                filter = [get_left,get_right](Tuple const& t) -> bool {
+                    return get_left(t) <= get_right(t);
                 };
             break ;
         }
@@ -99,7 +127,10 @@ namespace SQL_Compiler {
     }
 
     Filter::Filter(BaseOperator * const nextOp, Context const& ctx, SQL_AST::or_conditions const& conds)
-        : nextOp(nextOp), ctx(ctx), conds(conds) {}
+        : nextOp(nextOp), ctx(ctx), conds(conds)
+    {
+            compile();
+    }
 
     void Filter::compile() {
         filter = compile(conds);

@@ -1,43 +1,50 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cctype>
 
 #include "SQL_Parser/SQL_parser.hpp"
 #include "SQL_Compiler/query_builder.hpp"
 #include "SQL_Compiler/operators.hpp"
+#include "SQL_Compiler/tuple.hpp"
 
 using namespace std;
 
-bool ask_query(istream& in, string& str) {
+inline bool is_blank(string const& str) {
+    return all_of(begin(str), end(str), [](char c){
+        return isspace(static_cast<unsigned char>(c));
+    });
+}
+
+bool ask_query(istream& in, string& str, char sep='\n') {
     #ifdef CONSOLE_MODE
     cout << ">> ";
     #endif
-    return static_cast<bool>(getline(in, str));
+    bool success = true;
+    do {
+        success = static_cast<bool>(getline(in, str, sep));
+    } while (success && is_blank(str));
+    return success;
 }
 
-int main() {
-    SQL_Compiler::CSV_Reader r("database/homes.csv");
-    for (auto it = begin(r); !it.is_done(); ++it) {
-        auto t = *it;
-        for (auto const& e : t) {
-            cout << e << ", ";
-        }
-        cout << endl;
-    }
-    /*
+int main(int argc, char * argv[]) {
     string in;
-    while(ask_query(cin, in)) {
+    while(ask_query(cin, in, ';')) {
         try {
             SQL_AST::query ast;
             SQL_Parser::parse(ast, in); // perform syntax checking
             cout << ast << endl;
-            SQL_Compiler::build(ast); // perform a semantic checking
+            auto op = SQL_Compiler::build(ast); // perform a semantic checking
+            for (auto it = begin(*op); !it.is_done(); ++it) {
+                cout << *it;
+            }
         } catch (SQL_Parser::ParsingError const& e) {
             cout << "[Error] " << e.what() << endl;
             cout << "Parsing abort." << endl;
-        } catch (const SQL_Compiler::SemanticError& e) {
+        } catch (SQL_Compiler::SemanticError const& e) {
             cout << "[Error] " << e.what() << endl;
             cout << "Compilation abort." << endl;
         }
-    }*/
+    }
 }

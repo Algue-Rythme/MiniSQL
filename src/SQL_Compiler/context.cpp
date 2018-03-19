@@ -11,7 +11,7 @@ namespace SQL_Compiler {
     * Relation
     */
 
-    Relation::Relation(string const& filename, string const& name) : m_name(name) {
+    Relation::Relation(string const& filename, string const& name, int shift) : m_name(name) {
         ifstream file(filename);
         if (!file)
             throw SemanticError("fail to open "+filename);
@@ -20,7 +20,7 @@ namespace SQL_Compiler {
         auto const parser = (+(boost::spirit::x3::ascii::alnum)) % (*("," | boost::spirit::x3::ascii::blank));
         boost::spirit::x3::parse(iter, eof, parser, names);
         for (int att = 0; att < (int)names.size(); ++att) {
-            attributes[names[att]] = att;
+            attributes[names[att]] = att + shift;
         }
     }
 
@@ -32,6 +32,10 @@ namespace SQL_Compiler {
 
     string const& Relation::name() const {
         return m_name;
+    }
+
+    int Relation::nb_attributes() const {
+        return attributes.size();
     }
 
     /*
@@ -50,10 +54,12 @@ namespace SQL_Compiler {
         return relations.at(name);
     }
 
-    void Context::extend_from(SQL_AST::carthesian_product const& relations) {
+    void Context::extend_from(SQL_AST::cartesian_product const& relations) {
+        int shift = 0;
         for (auto const& sql_relation : relations.relations_) {
-            Relation relation(sql_relation.filename_, sql_relation.alias_);
+            Relation relation(sql_relation.filename_, sql_relation.alias_, shift);
             add_relation(relation);
+            shift += relation.nb_attributes();
         }
     }
 }

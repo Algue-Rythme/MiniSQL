@@ -5,7 +5,7 @@ using namespace std;
 namespace x3 = boost::spirit::x3;
 
 namespace {
-    class SQL_AST_Printer {
+    class SQL_AST_Printer : public boost::static_visitor<> {
         ostream& out;
     public:
         SQL_AST_Printer(ostream& out): out(out) {}
@@ -20,8 +20,12 @@ namespace {
             }
         }
 
-        void operator()(SQL_AST::query const& q) {
-            (*this)(q.select_);
+        void operator()(SQL_AST::union_op const& union_op) {
+            out << "(";
+            boost::apply_visitor(*this, union_op.left_);
+            out << ") UNION (";
+            boost::apply_visitor(*this, union_op.right_);
+            out << ")";
         }
 
         void operator()(SQL_AST::select const& s) {
@@ -51,7 +55,7 @@ namespace {
             (*this)(a.column_);
         }
 
-        void operator()(SQL_AST::carthesian_product const& c) {
+        void operator()(SQL_AST::cartesian_product const& c) {
             (*this)(c.relations_, ", ");
         }
 
@@ -70,9 +74,9 @@ namespace {
         }
 
         void operator()(SQL_AST::atomic_condition const& tc) {
-            (*this)(tc.left_);
+            boost::apply_visitor(*this, tc.left_);
             (*this)(tc.op_);
-            (*this)(tc.right_);
+            boost::apply_visitor(*this, tc.right_);
         }
 
         void operator()(SQL_AST::comparison_operator const& op) {
@@ -94,7 +98,7 @@ namespace {
 
 namespace SQL_AST {
     void print(std::ostream& out, SQL_AST::query const& ast) {
-        SQL_AST_Printer p(out);
-        p(ast);
+        SQL_AST_Printer printer(out);
+        boost::apply_visitor(printer, ast);
     }
 }

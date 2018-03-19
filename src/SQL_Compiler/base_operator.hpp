@@ -24,7 +24,7 @@ namespace SQL_Compiler {
         virtual Tuple const& dereference() const = 0;
         virtual void increment() = 0;
         virtual bool is_done() const = 0;
-        virtual void reset() = 0;
+        virtual void restart() = 0;
     };
 
     class OperatorIterator : public IteratorFacadeTuple<OperatorIterator>
@@ -37,7 +37,7 @@ namespace SQL_Compiler {
         Tuple const& dereference() const;
         void increment();
         bool is_done() const;
-        void reset();
+        void restart();
     };
 
     class BaseOperator {

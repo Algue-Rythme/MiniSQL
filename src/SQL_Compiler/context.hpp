@@ -21,9 +21,10 @@ namespace SQL_Compiler {
         std::string m_name;
         std::unordered_map<std::string, int> attributes;
     public:
-        Relation(std::string const& filename, std::string const& name);
+        Relation(std::string const& filename, std::string const& name, int shift = 0);
         int operator[](std::string const& attribute) const;
         std::string const& name() const;
+        int nb_attributes() const;
     };
 
     class Context {
@@ -31,7 +32,7 @@ namespace SQL_Compiler {
     public:
         void add_relation(Relation const& r);
         Relation const& operator[](std::string const& name) const;
-        void extend_from(SQL_AST::carthesian_product const& relations);
+        void extend_from(SQL_AST::cartesian_product const& relations);
     };
 }
 

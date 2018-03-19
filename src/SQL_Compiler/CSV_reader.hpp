@@ -19,7 +19,7 @@ namespace SQL_Compiler {
         Tuple const& dereference() const override;
         void increment() override;
         bool is_done() const override;
-        void reset() override;
+        void restart() override;
     };
 
     class CSV_Reader : public BaseOperator {

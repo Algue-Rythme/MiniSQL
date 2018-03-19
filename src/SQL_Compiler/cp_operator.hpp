@@ -1,5 +1,5 @@
-#ifndef CARTHESIAN_PRODUCT_OPERATOR_HPP
-#define CARTHESIAN_PRODUCT_OPERATOR_HPP
+#ifndef CARTESIAN_PRODUCT_OPERATOR_HPP
+#define CARTESIAN_PRODUCT_OPERATOR_HPP
 
 #include <memory>
 #include <vector>
@@ -8,22 +8,22 @@
 #include "base_operator.hpp"
 
 namespace SQL_Compiler {
-    class CarthesianProductIterator : public PolymorphicIterator {
+    class CartesianProductIterator : public PolymorphicIterator {
         std::vector<OperatorIterator> its;
-        int curRunning;
+        Tuple t;
+        void build_tuple();
     public:
-        CarthesianProductIterator(std::vector<std::unique_ptr<BaseOperator>> const&);
+        CartesianProductIterator(std::vector<std::unique_ptr<BaseOperator>> const&);
         Tuple const& dereference() const override;
         void increment() override;
         bool is_done() const override;
-        void reset() override;
+        void restart() override;
     };
 
-    class CarthesianProduct : public BaseOperator {
+    class CartesianProduct : public BaseOperator {
         std::vector<std::unique_ptr<BaseOperator>> relations;
-        Context ctx;
     public:
-        CarthesianProduct(std::vector<BaseOperator*> const&, Context const&);
+        CartesianProduct(std::vector<BaseOperator*> const&);
         OperatorIterator begin() const override;
     };
 }

@@ -43,7 +43,7 @@ namespace SQL_Compiler {
         return t.empty();
     }
 
-    void CSV_ReaderIterator::reset() {
+    void CSV_ReaderIterator::restart() {
         line_count = 0;
         file.close();
         file.open(filename);

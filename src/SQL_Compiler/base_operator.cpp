@@ -21,8 +21,8 @@ namespace SQL_Compiler {
         return it_ptr->is_done();
     }
 
-    void OperatorIterator::reset() {
-        it_ptr->reset();
+    void OperatorIterator::restart() {
+        it_ptr->restart();
     }
 
     OperatorIterator::OperatorIterator(OperatorIterator&& _it) : it_ptr(std::move(_it.it_ptr)) {}

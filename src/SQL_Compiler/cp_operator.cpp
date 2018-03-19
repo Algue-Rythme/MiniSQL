@@ -1,50 +1,62 @@
 #include "cp_operator.hpp"
 
 namespace SQL_Compiler {
-    CarthesianProductIterator::CarthesianProductIterator(std::vector<std::unique_ptr<BaseOperator>> const& operators)
-    : curRunning(0)
-    {
+    CartesianProductIterator::CartesianProductIterator(std::vector<std::unique_ptr<BaseOperator>> const& operators) {
         its.reserve(operators.size());
         for (auto const& op : operators) {
             its.emplace_back(op->begin());
         }
+        build_tuple();
     }
 
-    Tuple const& CarthesianProductIterator::dereference() const {
-        return *its.at(curRunning);
-    }
-
-    void CarthesianProductIterator::increment() {
+    void CartesianProductIterator::build_tuple() {
+        t.clear();
         if (is_done())
             return ;
+        for (auto const& it : its) {
+            copy(begin(*it), end(*it), back_inserter(t));
+        }
+    }
+
+    Tuple const& CartesianProductIterator::dereference() const {
+        return t;
+    }
+
+    void CartesianProductIterator::increment() {
+        unsigned int curRunning = 0;
         ++its[curRunning];
-        while (curRunning < (int)its.size() && its[curRunning.is_done()]) {
+        while (its[curRunning].is_done()) {
             ++curRunning;
+            if (curRunning >= its.size())
+                break ;
+            ++its[curRunning];
         }
-        for (int i = 0; i < curRunning; ++i) {
-            its[i].reset();
+        if (is_done())
+            return ;
+        for (unsigned int i = 0; i < curRunning; ++i) {
+            its[i].restart();
         }
+        build_tuple();
     }
 
-    bool CarthesianProductIterator::is_done() const {
-        return curRunning >= its.size();
+    bool CartesianProductIterator::is_done() const {
+        return its.back().is_done();
     }
 
-    void CarthesianProductIterator::reset() {
-        curRunning = 0;
+    void CartesianProductIterator::restart() {
         for (auto& it : its) {
-            its.reset();
+            it.restart();
         }
     }
 
-    CarthesianProduct(std::vector<BaseOperator*> const& relations_ptr, Context const& ctx): ctx(ctx) {
+    CartesianProduct::CartesianProduct(std::vector<BaseOperator*> const& relations_ptr) {
         relations.reserve(relations_ptr.size());
         for (auto const& ptr : relations_ptr) {
             relations.emplace_back(ptr);
         }
     }
 
-    OperatorIterator CarthesianProduct::begin() const {
-        return CarthesianProductIterator(relations);
+    OperatorIterator CartesianProduct::begin() const {
+        return OperatorIterator(new CartesianProductIterator(relations));
     }
-};
+}

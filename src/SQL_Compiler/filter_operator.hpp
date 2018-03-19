@@ -12,12 +12,13 @@ namespace SQL_Compiler {
     class FilterIterator : public PolymorphicIterator {
         OperatorIterator it;
         TupleFilter const& filter;
+        void skip();
     public:
         FilterIterator(OperatorIterator&&, TupleFilter const&);
         Tuple const& dereference() const override;
         void increment() override;
         bool is_done() const override;
-        void reset() override;
+        void restart() override;
     };
 
     class Filter : public BaseOperator {

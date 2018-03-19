@@ -37,7 +37,7 @@ namespace SQL_Parser {
         id_map["projections"] = "valid attribute name";
         id_map["project_rename"] = "valid attribute name";
         id_map["attribute"] = "valid attribute name";
-        id_map["carthesian_product"] = "valid attribute name";
+        id_map["cartesian_product"] = "valid attribute name";
         id_map["relation"] = "valid relation name ";
         id_map["or_conditions"] = "valid MiniSQL condition";
         id_map["and_conditions"] = "valid MiniSQL condition";

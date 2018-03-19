@@ -21,6 +21,10 @@ namespace SQL_Parser {
 
     query_type const query = "query";
 
+    struct union_op_class;
+    typedef x3::rule<union_op_class, SQL_AST::union_op> union_op_type;
+    union_op_type const union_op = "union_op";
+
     struct select_class;
     typedef x3::rule<select_class, SQL_AST::select> select_type;
     select_type const select = "select";
@@ -37,9 +41,9 @@ namespace SQL_Parser {
     typedef x3::rule<attribute_class, SQL_AST::attribute> attribute_type;
     attribute_type const attribute = "attribute";
 
-    struct carthesian_product_class;
-    typedef x3::rule<carthesian_product_class, SQL_AST::carthesian_product> carthesian_product_type;
-    carthesian_product_type const carthesian_product = "carthesian_product";
+    struct cartesian_product_class;
+    typedef x3::rule<cartesian_product_class, SQL_AST::cartesian_product> cartesian_product_type;
+    cartesian_product_type const cartesian_product = "cartesian_product";
 
     struct relation_class;
     typedef x3::rule<relation_class, SQL_AST::relation> relation_type;
@@ -75,7 +79,7 @@ namespace SQL_Parser {
         ]] >
         expect["\""];
     auto const relation_def = filename_def > identifier;
-    auto const carthesian_product_def = relation % ",";
+    auto const cartesian_product_def = relation % ",";
 
     struct comparison_operator_ : x3::symbols<SQL_AST::comparison_operator> {
         comparison_operator_() {
@@ -91,24 +95,30 @@ namespace SQL_Parser {
         }
     } comparison_operator_;
 
-    auto const atomic_condition_def = attribute > comparison_operator_ > attribute;
+    auto const field_def = "\"" > lexeme[*(char_ - "\"")] > "\"";
+    auto const operand_def = (attribute | field_def);
+
+    auto const atomic_condition_def = operand_def > comparison_operator_ > operand_def;
     auto const and_conditions_def = atomic_condition % "and";
     auto const or_conditions_def = and_conditions % "or";
 
     auto const select_def =
-        expect["select"] > projections >
-        expect["from"] > carthesian_product >
+        "select" > projections >
+        expect["from"] > cartesian_product >
         expect["where"] > or_conditions;
 
-    auto const query_def = select > ";";
+    auto const union_op_def = "(" > query > ")" > "union" > "(" > query > ")";
+
+    auto const query_def = (select | union_op);
 
     BOOST_SPIRIT_DEFINE(
         query
+        , union_op
         , select
         , projections
         , project_rename
         , attribute
-        , carthesian_product
+        , cartesian_product
         , relation
         , or_conditions
         , and_conditions
@@ -117,11 +127,12 @@ namespace SQL_Parser {
     )
 
     struct query_class : annotation_base, error_handler_base {};
+    struct union_op_class : annotation_base {};
     struct select_class : annotation_base {};
     struct projections_class : annotation_base {};
     struct project_rename_class : annotation_base {};
     struct attribute_class : annotation_base {};
-    struct carthesian_product_class : annotation_base {};
+    struct cartesian_product_class : annotation_base {};
     struct relation_class : annotation_base {};
     struct or_conditions_class : annotation_base {};
     struct and_conditions_class : annotation_base {};
