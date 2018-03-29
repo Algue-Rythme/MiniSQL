@@ -17,10 +17,12 @@ namespace SQL_AST {
 
     struct select;
     struct union_op;
+    struct minus_op;
 
     struct query : x3::variant
         < x3::forward_ast<select>
         , x3::forward_ast<union_op>
+        , x3::forward_ast<minus_op>
     > {
         using base_type::base_type;
         using base_type::operator=;
@@ -36,18 +38,27 @@ namespace SQL_AST {
         boost::optional<std::string> rename_;
     };
 
-    struct projections {
-        std::vector<project_rename> project_rename_;
-    };
+    struct projections : public std::vector<project_rename> {};
 
-    struct relation {
+    struct load_file {
         std::string filename_;
         std::string alias_;
     };
 
-    struct cartesian_product {
-        std::vector<relation> relations_;
+    struct subquery {
+        query query_;
+        std::string alias_;
     };
+
+    struct from_relation : x3::variant<load_file, subquery>  {
+        from_relation() = default;
+        from_relation(from_relation const&) = default;
+        from_relation& operator=(from_relation const&) = default;
+        using base_type::base_type;
+        using base_type::operator=;
+    };
+
+    struct cartesian_product : public std::vector<from_relation> {};
 
     struct operand : x3::variant
         < attribute
@@ -66,27 +77,65 @@ namespace SQL_AST {
         , LTE
     };
 
-    struct atomic_condition {
+    struct comparison_condition {
         operand left_;
         comparison_operator op_;
         operand right_;
     };
 
-    struct and_conditions {
-        std::vector<atomic_condition> atomic_conditions_;
+    enum class in_type {
+        IN,
+        NOT_IN
     };
 
-    struct or_conditions {
-        std::vector<and_conditions> and_conditions_;
+    struct in_condition {
+        attribute att_;
+        in_type in_type_;
+        query query_;
     };
+
+    struct atomic_condition : x3::variant
+        < comparison_condition
+        , in_condition
+    > {
+        atomic_condition() = default;
+        atomic_condition(atomic_condition const&) = default;
+        atomic_condition& operator=(atomic_condition const&) = default;
+        using base_type::base_type;
+        using base_type::operator=;
+    };
+
+    struct and_conditions : public std::vector<atomic_condition> {};
+    struct or_conditions : public std::vector<and_conditions> {};
+
+    struct group_by : public std::vector<attribute> {};
+
+    enum class order_type {
+        ASC,
+        DESC
+    };
+
+    struct order_by_clause {
+        attribute att_;
+        order_type order_type_;
+    };
+
+    struct order_by : public std::vector<order_by_clause> {};
 
     struct select {
         projections projections_;
         cartesian_product relations_;
         or_conditions or_conditions_;
+        boost::optional<group_by> group_by_;
+        boost::optional<order_by> order_by_;
     };
 
     struct union_op {
+        query left_;
+        query right_;
+    };
+
+    struct minus_op {
         query left_;
         query right_;
     };

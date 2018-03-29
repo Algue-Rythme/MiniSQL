@@ -6,61 +6,68 @@
 #include "SQL_AST.hpp"
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::atomic_condition,
-    (SQL_AST::operand, left_)
-    (SQL_AST::comparison_operator, op_)
-    (SQL_AST::operand, right_)
+    SQL_AST::comparison_condition
+    , left_
+    , op_
+    , right_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::and_conditions,
-    (std::vector<SQL_AST::atomic_condition>, atomic_conditions_)
+    SQL_AST::in_condition
+    , att_
+    , in_type_
+    , query_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::or_conditions,
-    (std::vector<SQL_AST::and_conditions>, and_conditions_)
+    SQL_AST::subquery
+    , query_
+    , alias_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::relation,
-    (std::string, filename_)
-    (std::string, alias_)
+    SQL_AST::load_file
+    , filename_
+    , alias_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::cartesian_product,
-    (std::vector<SQL_AST::relation>, relations_)
+    SQL_AST::attribute
+    , relation_
+    , column_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::attribute,
-    (std::string, relation_)
-    (std::string, column_)
+    SQL_AST::project_rename
+    , attribute_
+    , rename_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::project_rename,
-    (SQL_AST::attribute, attribute_)
-    (boost::optional<std::string>, rename_)
+    SQL_AST::order_by_clause
+    , att_
+    , order_type_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::projections,
-    (std::vector<SQL_AST::project_rename>, project_rename_)
+    SQL_AST::select
+    , projections_
+    , relations_
+    , or_conditions_
+    , group_by_
+    , order_by_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::select,
-    (SQL_AST::projections, projections_)
-    (SQL_AST::cartesian_product, relations_)
-    (SQL_AST::or_conditions, or_conditions_)
+    SQL_AST::union_op
+    , left_
+    , right_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    SQL_AST::union_op,
-    (SQL_AST::query, left_)
-    (SQL_AST::query, right_)
+    SQL_AST::minus_op
+    , left_
+    , right_
 )
 
 #endif

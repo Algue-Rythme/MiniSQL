@@ -8,7 +8,7 @@
 #include "operators.hpp"
 
 namespace SQL_Compiler {
-    std::unique_ptr<BaseOperator> build(SQL_AST::query const& ast);
+    std::unique_ptr<BaseOperator> build(SQL_AST::query ast, Context const& ctx = Context());
 }
 
 #endif

@@ -8,14 +8,10 @@
 
 namespace SQL_Compiler {
     class CSV_ReaderIterator : public PolymorphicIterator {
-        std::string filename;
-        int line_count;
-        std::ifstream file;
-        Tuple t;
-        void skip_lines(int);
+        std::vector<Tuple> const& tuples;
+        decltype(tuples.cbegin()) it;
     public:
-        CSV_ReaderIterator(std::string const&);
-        CSV_ReaderIterator(CSV_ReaderIterator const&);
+        CSV_ReaderIterator(std::vector<Tuple> const&);
         Tuple const& dereference() const override;
         void increment() override;
         bool is_done() const override;
@@ -24,6 +20,7 @@ namespace SQL_Compiler {
 
     class CSV_Reader : public BaseOperator {
         std::string filename;
+        std::vector<Tuple> tuples;
     public:
         CSV_Reader(std::string const& filename);
         OperatorIterator begin() const override;

@@ -7,5 +7,7 @@
 #include "cp_operator.hpp"
 #include "project_operator.hpp"
 #include "union_operator.hpp"
+#include "minus_operator.hpp"
+#include "sorter_operator.hpp"
 
 #endif

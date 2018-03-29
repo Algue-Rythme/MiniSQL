@@ -42,9 +42,9 @@ namespace SQL_Compiler {
     }
 
     void Project::compile() {
-        unsigned int s = projections.project_rename_.size();
+        unsigned int s = projections.size();
         vector<unsigned int> indices; indices.reserve(s);
-        for (auto const& project : projections.project_rename_) {
+        for (auto const& project : projections) {
             auto const att = project.attribute_;
             indices.push_back(ctx[att.relation_][att.column_]);
         }

@@ -1,8 +1,8 @@
 Langage,Type,Vitesse
-C,imperatif,oui
-C++,imperatif,oui
-Python,imperatif,non
-Ocaml,fonctionnel,bof
-SQL,declaratif,bof
-Haskell,fonctionnel,bof
-bfunge93,bizarre,non
+C,imperatif,2
+C++,imperatif,1
+Python,imperatif,30
+Ocaml,fonctionnel,8
+SQL,declaratif,18
+Haskell,fonctionnel,11
+bfunge93,bizarre,100

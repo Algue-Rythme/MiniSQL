@@ -47,6 +47,7 @@ namespace SQL_Compiler {
         for (auto& it : its) {
             it.restart();
         }
+        build_tuple();
     }
 
     CartesianProduct::CartesianProduct(std::vector<BaseOperator*> const& relations_ptr) {

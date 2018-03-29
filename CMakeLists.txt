@@ -9,12 +9,12 @@ file (GLOB_RECURSE source_files
 	    src/*.hpp
 )
 
-add_executable(sql_csv ${source_files})
+add_executable(minisql ${source_files})
 
 find_package(Boost ${BOOST_VERSION} REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
-target_link_libraries(sql_csv ${Boost_LIBRARIES})
+target_link_libraries(minisql ${Boost_LIBRARIES})
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=c++14 -Wall -pedantic-errors)

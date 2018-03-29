@@ -10,14 +10,26 @@ namespace {
     public:
         SQL_AST_Printer(ostream& out): out(out) {}
 
-        template<typename T>
-        void operator()(vector<T> const& t, string const& sep) {
+        template<typename T, typename F>
+        void operator()(vector<T> const& t, string const& sep, F f) {
             if (!t.empty())
-                (*this)(t[0]);
+                f(t[0]);
             for (unsigned int i = 1; i < t.size(); ++i) {
                 out << sep;
-                (*this)(t[i]);
+                f(t[i]);
             }
+        }
+
+        void operator()(SQL_AST::atomic_condition const& atom) {
+            boost::apply_visitor(*this, atom);
+        }
+
+        void operator()(SQL_AST::minus_op const& minus_op) {
+            out << "(";
+            boost::apply_visitor(*this, minus_op.left_);
+            out << ") MINUS (";
+            boost::apply_visitor(*this, minus_op.right_);
+            out << ")";
         }
 
         void operator()(SQL_AST::union_op const& union_op) {
@@ -35,10 +47,18 @@ namespace {
             (*this)(s.relations_);
             out << " WHERE ";
             (*this)(s.or_conditions_);
+            if (s.group_by_) {
+                out << " GROUP BY ";
+                (*this)(s.group_by_.value(), ", ", *this);
+            }
+            if (s.order_by_) {
+                out << " ORDER BY ";
+                (*this)(s.order_by_.value(), ", ", *this);
+            }
         }
 
         void operator()(SQL_AST::projections const& p) {
-            (*this)(p.project_rename_, ", ");
+            (*this)(p, ", ", *this);
         }
 
         void operator()(SQL_AST::project_rename const& pr) {
@@ -50,33 +70,54 @@ namespace {
         }
 
         void operator()(SQL_AST::attribute const& a) {
-            (*this)(a.relation_);
+            out << a.relation_;
             out << ".";
-            (*this)(a.column_);
+            out << a.column_;
         }
 
         void operator()(SQL_AST::cartesian_product const& c) {
-            (*this)(c.relations_, ", ");
+            auto visitor =
+                [this](decltype(c.back()) v){
+                    return boost::apply_visitor(*this, v);
+                };
+            (*this)(c, ", ", visitor);
         }
 
-        void operator()(SQL_AST::relation const& r) {
-            (*this)(r.filename_);
-            out << " ";
-            (*this)(r.alias_);
+        void operator()(SQL_AST::load_file const& load_file) {
+            (*this)(load_file.filename_);
+            out << " " << load_file.alias_;
+        }
+
+        void operator()(SQL_AST::subquery const& subquery) {
+            out << "(";
+            boost::apply_visitor(*this, subquery.query_);
+            out << ") ";
+            out << subquery.alias_;
         }
 
         void operator()(SQL_AST::or_conditions const& oc) {
-            (*this)(oc.and_conditions_, " OR ");
+            (*this)(oc, " OR ", *this);
         }
 
         void operator()(SQL_AST::and_conditions const& ac) {
-            (*this)(ac.atomic_conditions_, " AND ");
+            (*this)(ac, " AND ", *this);
         }
 
-        void operator()(SQL_AST::atomic_condition const& tc) {
+        void operator()(SQL_AST::comparison_condition const& tc) {
             boost::apply_visitor(*this, tc.left_);
             (*this)(tc.op_);
             boost::apply_visitor(*this, tc.right_);
+        }
+
+        void operator()(SQL_AST::in_condition const& ic) {
+            (*this)(ic.att_);
+            switch (ic.in_type_) {
+                case SQL_AST::in_type::IN: out << " IN "; break;
+                case SQL_AST::in_type::NOT_IN: out << " NOT IN "; break;
+            }
+            out << "(";
+            boost::apply_visitor(*this, ic.query_);
+            out << ")";
         }
 
         void operator()(SQL_AST::comparison_operator const& op) {
@@ -90,8 +131,20 @@ namespace {
             }
         }
 
+        void operator()(SQL_AST::order_by_clause c) {
+            (*this)(c.att_);
+            switch (c.order_type_) {
+                case SQL_AST::order_type::ASC:
+                out << " ASC";
+                break;
+                case SQL_AST::order_type::DESC:
+                out << " DESC";
+                break;
+            }
+        }
+
         void operator()(string const& str) {
-            out << str;
+            out << "\"" << str << "\"";
         }
     };
 }

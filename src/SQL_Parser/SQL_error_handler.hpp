@@ -41,7 +41,8 @@ namespace SQL_Parser {
         id_map["relation"] = "valid relation name ";
         id_map["or_conditions"] = "valid MiniSQL condition";
         id_map["and_conditions"] = "valid MiniSQL condition";
-        id_map["atomic_condition"] = "valid MiniSQL condition";
+        id_map["comparison_condition"] = "valid MiniSQL condition";
+        id_map["in_condition"] = "valid MiniSQL condition";
     }
 
     template <typename Iterator, typename Exception, typename Context>

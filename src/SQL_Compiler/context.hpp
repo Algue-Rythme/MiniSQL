@@ -21,7 +21,7 @@ namespace SQL_Compiler {
         std::string m_name;
         std::unordered_map<std::string, int> attributes;
     public:
-        Relation(std::string const& filename, std::string const& name, int shift = 0);
+        Relation(std::vector<std::string> const& names, std::string const& name, int shift = 0);
         int operator[](std::string const& attribute) const;
         std::string const& name() const;
         int nb_attributes() const;
@@ -32,8 +32,14 @@ namespace SQL_Compiler {
     public:
         void add_relation(Relation const& r);
         Relation const& operator[](std::string const& name) const;
-        void extend_from(SQL_AST::cartesian_product const& relations);
     };
+
+    std::vector<std::string> get_attributes_names(SQL_AST::query const& q);
+    std::vector<std::string> get_attributes_names(std::string const& filename);
+    std::vector<std::string> get_attributes_names(SQL_AST::from_relation const& from_rel);
+    std::string get_alias(SQL_AST::from_relation const& rel);
+
+    void extend_from(Context& ctx, SQL_AST::cartesian_product const& relations);
 }
 
 #endif

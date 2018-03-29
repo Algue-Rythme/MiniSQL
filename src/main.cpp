@@ -3,13 +3,26 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
+#include <sstream>
 
 #include "SQL_Parser/SQL_parser.hpp"
+#include "SQL_Parser/normal_form.hpp"
 #include "SQL_Compiler/query_builder.hpp"
 #include "SQL_Compiler/operators.hpp"
 #include "SQL_Compiler/tuple.hpp"
+#include "SQL_Compiler/optimizer.hpp"
+
+#define CONSOLE_MODE
 
 using namespace std;
+
+void print_header(SQL_AST::query const& ast) {
+    auto header = SQL_Compiler::get_attributes_names(ast);
+    ostringstream ss;
+    ss << header;
+    string sep(ss.str().size(), '-');
+    cout << header << "\n" << sep << endl;
+}
 
 inline bool is_blank(string const& str) {
     return all_of(begin(str), end(str), [](char c){
@@ -19,7 +32,7 @@ inline bool is_blank(string const& str) {
 
 bool ask_query(istream& in, string& str, char sep='\n') {
     #ifdef CONSOLE_MODE
-    cout << ">> ";
+    cout << "minisql> ";
     #endif
     bool success = true;
     do {
@@ -29,15 +42,23 @@ bool ask_query(istream& in, string& str, char sep='\n') {
 }
 
 int main(int argc, char * argv[]) {
+    ios::sync_with_stdio(false);
+    #ifdef CONSOLE_MODE
+    cout << "MiniSQL version 1.0 (" << __DATE__ << ", " << __TIME__ << ")";
+    cout << " by Louis Bethune" << endl;
+    #endif
     string in;
     while(ask_query(cin, in, ';')) {
         try {
             SQL_AST::query ast;
-            SQL_Parser::parse(ast, in); // perform syntax checking
+            SQL_Parser::parse(ast, in);
             cout << ast << endl;
-            auto op = SQL_Compiler::build(ast); // perform a semantic checking
+            ast = SQL_Parser::to_normal_form(ast);
+            cout << "[NF] " << ast << endl;
+            auto op = SQL_Compiler::build(ast);
+            print_header(ast);
             for (auto it = begin(*op); !it.is_done(); ++it) {
-                cout << *it;
+                cout << *it << "\n";
             }
         } catch (SQL_Parser::ParsingError const& e) {
             cout << "[Error] " << e.what() << endl;
@@ -45,6 +66,10 @@ int main(int argc, char * argv[]) {
         } catch (SQL_Compiler::SemanticError const& e) {
             cout << "[Error] " << e.what() << endl;
             cout << "Compilation abort." << endl;
+        } catch (SQL_Optimizer::NormalizingError const& e) {
+            cout << "[Error] " << e.what() << endl;
+            cout << "Optimization abort." << endl;
         }
     }
+    cout << endl;
 }
