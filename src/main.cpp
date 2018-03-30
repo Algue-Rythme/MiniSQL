@@ -52,9 +52,9 @@ int main(int argc, char * argv[]) {
         try {
             SQL_AST::query ast;
             SQL_Parser::parse(ast, in);
-            cout << ast << endl;
+            //cout << ast << endl;
             ast = SQL_Parser::to_normal_form(ast);
-            cout << "[NF] " << ast << endl;
+            //cout << "[NF] " << ast << endl;
             auto op = SQL_Compiler::build(ast);
             print_header(ast);
             for (auto it = begin(*op); !it.is_done(); ++it) {

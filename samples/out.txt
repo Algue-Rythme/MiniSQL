@@ -1,185 +1,186 @@
-MiniSQL version 1.0 (Mar 29 2018, 14:53:01) by Louis Bethune
-minisql> GO
-      Andromeda     |   Philip Whitney   
-      Andromeda     |Fredericka Alexander
-      Andromeda     |      Thor Bush     
-      Andromeda     |   Nichole Baldwin  
-      Andromeda     |      Yen Perez     
-     Capricornus    |      Ray Tran      
-     Capricornus    |     Nell Hurst     
-     Capricornus    |   Tatyana Becker   
-     Capricornus    |    Iris Mcbride    
-        Virgo       |     Diana Levy     
-        Virgo       |      Yen Perez     
-        Virgo       |   Gregory Hunter   
-        Virgo       |     Olympia Gay    
-        Virgo       |   Brandon Travis   
-        Virgo       |    Kerry Walton    
-        Virgo       |    Patrick Carey   
-        Virgo       |  Clarke Christian  
-        Virgo       |    Kerry Walton    
-        Virgo       |     Ivy Carroll    
-       Pegasus      |   Jillian Watson   
-       Pegasus      |   Jillian Watson   
-       Pegasus      |     Hoyt Alston    
-       Pegasus      |    Deborah Noel    
-       Pegasus      |    Kenyon Molina   
-       Pegasus      |      Yen Perez     
-       Pegasus      |    Blaze Cooper    
-       Pegasus      |     Garth Chen     
-       Pegasus      |  Forrest Harrison  
-       Pegasus      |   Nichole Baldwin  
-       Pegasus      |   Odysseus Joyce   
-      Aquarius      | Alexander Sullivan 
-      Aquarius      |   McKenzie Jensen  
-      Aquarius      |      Hop White     
-      Aquarius      |     Diana Levy     
-      Aquarius      |   Nichole Baldwin  
-      Aquarius      |    Devin Bolton    
-      Aquarius      |   Tatyana Becker   
-      Aquarius      |    Rose Hancock    
-      Aquarius      |   Guinevere Byers  
-      Aquarius      |   Elmo Harrington  
-      Aquarius      |      Yuli Pate     
-      Aquarius      |   Diana Peterson   
-      Aquarius      |     Nell Hurst     
-      Ophiuchus     |   Vivian Gregory   
-      Ophiuchus     |     Kenyon Hood    
-      Ophiuchus     |   Rebecca Carson   
-      Ophiuchus     |  Forrest Harrison  
-      Ophiuchus     |   Kenneth Estrada  
-      Ophiuchus     |    Norman Murphy   
-      Ophiuchus     |    Heidi Vinson    
-      Ophiuchus     |     Evan Lynch     
-      Ophiuchus     |   Iona Rasmussen   
-      Ophiuchus     |  Aidan Livingston  
-      Ophiuchus     |     Uta Lindsey    
-      Ophiuchus     |      Yuli Pate     
-      Ophiuchus     |    Melinda Lott    
-      Ophiuchus     |     Dante Pena     
-        Orion       |    Peter Steele    
-        Orion       |   Arden Lancaster  
-        Orion       |   Philip Whitney   
-        Orion       |     Gemma Wells    
-        Orion       |    Patrick Carey   
-        Orion       |    Destiny Love    
-        Orion       |      Otto Gray     
-        Orion       |    Destiny Love    
-        Orion       |  Aidan Livingston  
-        Orion       |    Peter Steele    
-        Orion       |      Amir Wall     
-        Orion       |   Brandon Travis   
-       Pisces       |    Heidi Vinson    
-       Pisces       |    Joelle Meyer    
-       Pisces       |   Elmo Harrington  
-       Pisces       |     Oliver Lowe    
-       Pisces       |    Deborah Noel    
-       Pisces       |    Hedwig Macias   
-       Pisces       |    Clark Hensley   
-       Pisces       |      Yuli Pate     
-       Pisces       |     Olympia Gay    
-      Scorpius      |     Ray Atkins     
-      Scorpius      |    Raphael Diaz    
-      Scorpius      |    Deborah Noel    
-      Scorpius      |      Ray Tran      
-      Scorpius      |   Honorato Bowman  
-      Scorpius      |    Giacomo Case    
-      Scorpius      |    Yoshio Short    
-      Scorpius      |      Yen Perez     
-      Scorpius      |     Ivy Carroll    
-      Scorpius      |   Tatyana Becker   
-      Scorpius      |    Giacomo Case    
-      Scorpius      |    Deborah Noel    
-      Scorpius      |    Mollie Poole    
-      Scorpius      |Fredericka Alexander
-      Scorpius      |   Hyacinth Harris  
-      Scorpius      |     Gemma Wells    
-      Scorpius      |    Lillian Berg    
-     Argo Navis     |   Bruno Shepherd   
-     Argo Navis     |    Iris Mcbride    
-     Argo Navis     |    Patrick Carey   
-     Argo Navis     |   Keelie Rosales   
-     Argo Navis     |  Clarke Christian  
-     Argo Navis     |   Philip Whitney   
-     Argo Navis     |    Vernon Nieves   
-       Gemini       |   Keelie Rosales   
-       Gemini       |    Iris Mcbride    
-       Gemini       |   Martin Cabrera   
-       Gemini       |     Coby Dennis    
-       Gemini       |    Paki Stanley    
-        Ursa        |    Eliana Santos   
-        Ursa        |    Rose Hancock    
-        Ursa        | Alexander Sullivan 
+MiniSQL version 1.0 (Mar 30 2018, 02:42:36) by Louis Bethune
+minisql>         titre       |         nom        
+-----------------------------------------
+        Aries       |    Heidi Vinson    
+        Aries       |    Mollie Poole    
+        Aries       |      Amir Wall     
+        Aries       |     Coby Dennis    
+        Aries       |   Vivian Gregory   
+        Aries       |    Destiny Love    
+        Aries       |   Diana Peterson   
+        Aries       |   Honorato Bowman  
+        Aries       |   Austin Mueller   
+        Aries       |    Kameko Short    
+        Aries       |   Rebecca Carson   
+        Aries       |   Kenneth Estrada  
+        Aries       |     Garth Chen     
+        Libra       |   Hyacinth Harris  
+        Libra       |      Ray Tran      
+        Libra       |   Aristotle Lloyd  
+        Libra       |   Rebecca Carson   
         Ursa        |   Brandon Travis   
-        Ursa        |  Forrest Harrison  
+        Ursa        |    Rose Hancock    
+        Ursa        |    Eliana Santos   
+        Ursa        |    Destiny Love    
         Ursa        |   Diana Peterson   
+        Ursa        |  Forrest Harrison  
+        Ursa        | Alexander Sullivan 
         Ursa        |    Deborah Noel    
         Ursa        |    Giacomo Case    
-        Ursa        |    Destiny Love    
-       Cancer       |   Aristotle Lloyd  
-       Cancer       |   Zenaida Ashley   
-       Cancer       |   Brandon Travis   
-       Cancer       |     Gemma Wells    
-       Cancer       |      Otto Gray     
-       Cancer       |   Elmo Harrington  
-       Cancer       |     Evan Lynch     
-       Cancer       |    Kerry Walton    
-        Lyra        |   Honorato Bowman  
-        Lyra        |   McKenzie Jensen  
-        Lyra        |   Austin Mueller   
-        Lyra        |      Otto Gray     
-        Lyra        |     Coby Dennis    
-        Lyra        |     Evan Lynch     
-        Lupus       |   Rebecca Carson   
-        Lupus       |    Iris Mcbride    
-        Lupus       |    Kenyon Molina   
-        Lupus       |     Tana Thomas    
-        Lupus       |   Guinevere Byers  
-        Lupus       |    Tana Dillard    
-        Lupus       |    Tana Dillard    
-        Lupus       |Fredericka Alexander
+       Gemini       |    Paki Stanley    
+       Gemini       |     Coby Dennis    
+       Gemini       |   Keelie Rosales   
+       Gemini       |   Martin Cabrera   
+       Gemini       |    Iris Mcbride    
         Lupus       |    Norman Murphy   
         Lupus       |  Maxwell Trujillo  
-       Perseus      |    Kenyon Molina   
-       Perseus      |    Rose Hancock    
-       Perseus      |     Evan Lynch     
-       Perseus      |    Clark Sanford   
-       Perseus      |    Melinda Lott    
-       Perseus      |  Forrest Harrison  
-       Perseus      |    Tana Dillard    
-       Perseus      |Fredericka Alexander
-       Perseus      |   Marshall Nguyen  
-       Perseus      |   Diana Peterson   
-       Perseus      |    Hedwig Macias   
-       Perseus      |    Kameko Short    
-       Perseus      |    Kameko Short    
-       Perseus      |     Dante Pena     
-       Perseus      |     Ray Atkins     
-       Perseus      |    Norman Murphy   
+        Lupus       |    Tana Dillard    
+        Lupus       |    Tana Dillard    
+        Lupus       |     Tana Thomas    
+        Lupus       |   Guinevere Byers  
+        Lupus       |    Kenyon Molina   
+        Lupus       |Fredericka Alexander
+        Lupus       |   Rebecca Carson   
+        Lupus       |    Iris Mcbride    
+        Virgo       |     Diana Levy     
+        Virgo       |   Gregory Hunter   
+        Virgo       |     Olympia Gay    
+        Virgo       |  Clarke Christian  
+        Virgo       |   Brandon Travis   
+        Virgo       |      Yen Perez     
+        Virgo       |    Kerry Walton    
+        Virgo       |    Kerry Walton    
+        Virgo       |     Ivy Carroll    
+        Virgo       |    Patrick Carey   
+       Cancer       |     Evan Lynch     
+       Cancer       |     Gemma Wells    
+       Cancer       |   Zenaida Ashley   
+       Cancer       |      Otto Gray     
+       Cancer       |   Elmo Harrington  
+       Cancer       |   Brandon Travis   
+       Cancer       |    Kerry Walton    
+       Cancer       |   Aristotle Lloyd  
+       Pegasus      |    Kenyon Molina   
+       Pegasus      |     Hoyt Alston    
+       Pegasus      |      Yen Perez     
+       Pegasus      |   Odysseus Joyce   
+       Pegasus      |    Blaze Cooper    
+       Pegasus      |  Forrest Harrison  
+       Pegasus      |   Nichole Baldwin  
+       Pegasus      |    Deborah Noel    
+       Pegasus      |   Jillian Watson   
+       Pegasus      |   Jillian Watson   
+       Pegasus      |     Garth Chen     
+     Capricornus    |   Tatyana Becker   
+     Capricornus    |     Nell Hurst     
+     Capricornus    |      Ray Tran      
+     Capricornus    |    Iris Mcbride    
+      Aquarius      |     Diana Levy     
+      Aquarius      |    Devin Bolton    
+      Aquarius      |      Yuli Pate     
+      Aquarius      |   Tatyana Becker   
+      Aquarius      |   Elmo Harrington  
+      Aquarius      |     Nell Hurst     
+      Aquarius      |   Guinevere Byers  
+      Aquarius      |    Rose Hancock    
+      Aquarius      |   Diana Peterson   
+      Aquarius      | Alexander Sullivan 
+      Aquarius      |   Nichole Baldwin  
+      Aquarius      |      Hop White     
+      Aquarius      |   McKenzie Jensen  
+        Orion       |  Aidan Livingston  
+        Orion       |     Gemma Wells    
+        Orion       |      Otto Gray     
+        Orion       |   Philip Whitney   
+        Orion       |   Brandon Travis   
+        Orion       |      Amir Wall     
+        Orion       |    Destiny Love    
+        Orion       |    Destiny Love    
+        Orion       |    Peter Steele    
+        Orion       |    Peter Steele    
+        Orion       |    Patrick Carey   
+        Orion       |   Arden Lancaster  
+       Aquila       |    Yoshio Short    
        Aquila       |   Philip Whitney   
        Aquila       |    Eliana Santos   
        Aquila       |    Iris Mcbride    
-       Aquila       |    Yoshio Short    
+      Andromeda     |   Philip Whitney   
+      Andromeda     |      Yen Perez     
+      Andromeda     |Fredericka Alexander
+      Andromeda     |   Nichole Baldwin  
+      Andromeda     |      Thor Bush     
+       Pisces       |     Olympia Gay    
+       Pisces       |    Hedwig Macias   
+       Pisces       |    Heidi Vinson    
+       Pisces       |      Yuli Pate     
+       Pisces       |     Oliver Lowe    
+       Pisces       |   Elmo Harrington  
+       Pisces       |    Joelle Meyer    
+       Pisces       |    Clark Hensley   
+       Pisces       |    Deborah Noel    
+       Sagitta      |     Carly Casey    
        Sagitta      |   Tatyana Becker   
+       Sagitta      |      Amir Wall     
        Sagitta      |    Destiny Love    
        Sagitta      |   Austin Mueller   
-       Sagitta      |     Carly Casey    
-       Sagitta      |      Amir Wall     
-        Libra       |   Rebecca Carson   
-        Libra       |   Aristotle Lloyd  
-        Libra       |   Hyacinth Harris  
-        Libra       |      Ray Tran      
-        Aries       |    Kameko Short    
-        Aries       |    Heidi Vinson    
-        Aries       |   Austin Mueller   
-        Aries       |      Amir Wall     
-        Aries       |   Rebecca Carson   
-        Aries       |   Diana Peterson   
-        Aries       |   Vivian Gregory   
-        Aries       |     Garth Chen     
-        Aries       |    Mollie Poole    
-        Aries       |   Kenneth Estrada  
-        Aries       |   Honorato Bowman  
-        Aries       |    Destiny Love    
-        Aries       |     Coby Dennis    
+       Perseus      |    Norman Murphy   
+       Perseus      |     Evan Lynch     
+       Perseus      |    Melinda Lott    
+       Perseus      |    Tana Dillard    
+       Perseus      |    Hedwig Macias   
+       Perseus      |     Ray Atkins     
+       Perseus      |    Rose Hancock    
+       Perseus      |    Kenyon Molina   
+       Perseus      |     Dante Pena     
+       Perseus      |   Diana Peterson   
+       Perseus      |  Forrest Harrison  
+       Perseus      |   Marshall Nguyen  
+       Perseus      |    Kameko Short    
+       Perseus      |    Kameko Short    
+       Perseus      |Fredericka Alexander
+       Perseus      |    Clark Sanford   
+      Scorpius      |    Lillian Berg    
+      Scorpius      |     Gemma Wells    
+      Scorpius      |    Yoshio Short    
+      Scorpius      |   Hyacinth Harris  
+      Scorpius      |    Mollie Poole    
+      Scorpius      |   Tatyana Becker   
+      Scorpius      |     Ray Atkins     
+      Scorpius      |      Ray Tran      
+      Scorpius      |      Yen Perez     
+      Scorpius      |   Honorato Bowman  
+      Scorpius      |    Raphael Diaz    
+      Scorpius      |Fredericka Alexander
+      Scorpius      |     Ivy Carroll    
+      Scorpius      |    Deborah Noel    
+      Scorpius      |    Deborah Noel    
+      Scorpius      |    Giacomo Case    
+      Scorpius      |    Giacomo Case    
+        Lyra        |     Evan Lynch     
+        Lyra        |      Otto Gray     
+        Lyra        |     Coby Dennis    
+        Lyra        |   Honorato Bowman  
+        Lyra        |   Austin Mueller   
+        Lyra        |   McKenzie Jensen  
+      Ophiuchus     |    Norman Murphy   
+      Ophiuchus     |     Evan Lynch     
+      Ophiuchus     |  Aidan Livingston  
+      Ophiuchus     |    Melinda Lott    
+      Ophiuchus     |    Heidi Vinson    
+      Ophiuchus     |   Iona Rasmussen   
+      Ophiuchus     |      Yuli Pate     
+      Ophiuchus     |   Vivian Gregory   
+      Ophiuchus     |     Dante Pena     
+      Ophiuchus     |     Uta Lindsey    
+      Ophiuchus     |  Forrest Harrison  
+      Ophiuchus     |     Kenyon Hood    
+      Ophiuchus     |   Rebecca Carson   
+      Ophiuchus     |   Kenneth Estrada  
+     Argo Navis     |   Bruno Shepherd   
+     Argo Navis     |    Vernon Nieves   
+     Argo Navis     |  Clarke Christian  
+     Argo Navis     |   Philip Whitney   
+     Argo Navis     |   Keelie Rosales   
+     Argo Navis     |    Patrick Carey   
+     Argo Navis     |    Iris Mcbride    
 minisql> 

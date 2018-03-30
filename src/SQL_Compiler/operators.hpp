@@ -9,5 +9,6 @@
 #include "union_operator.hpp"
 #include "minus_operator.hpp"
 #include "sorter_operator.hpp"
+#include "join_operator.hpp"
 
 #endif

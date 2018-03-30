@@ -116,17 +116,15 @@ namespace SQL_Compiler {
     void extend_from(Context& ctx, SQL_AST::cartesian_product const& relations) {
         int shift = 0;
         for (auto const& sql_relation : relations) {
-            vector<std::string> names;
-            string alias = get_alias(sql_relation);
-            if (auto load_file_ptr = boost::get<SQL_AST::load_file>(&sql_relation)) {
-                auto const& filename = load_file_ptr->filename_;
-                names = get_attributes_names(filename);
-            } else if (auto subquery_ptr = boost::get<SQL_AST::subquery>(&sql_relation)) {
-                names = get_attributes_names(subquery_ptr->query_);
-            }
-            Relation relation(names, alias, shift);
+            Relation relation = build_relation(sql_relation, shift);
             ctx.add_relation(relation);
             shift += relation.nb_attributes();
         }
+    }
+
+    Relation build_relation(SQL_AST::from_relation const& sql_relation, int shift) {
+        auto alias = get_alias(sql_relation);
+        auto names = get_attributes_names(sql_relation);
+        return Relation(names, alias, shift);
     }
 }

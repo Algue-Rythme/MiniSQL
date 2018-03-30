@@ -34,6 +34,8 @@ namespace SQL_Compiler {
         Relation const& operator[](std::string const& name) const;
     };
 
+    Relation build_relation(SQL_AST::from_relation const& from_rel, int shift = 0);
+
     std::vector<std::string> get_attributes_names(SQL_AST::query const& q);
     std::vector<std::string> get_attributes_names(std::string const& filename);
     std::vector<std::string> get_attributes_names(SQL_AST::from_relation const& from_rel);
